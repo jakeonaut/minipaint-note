@@ -3,7 +3,7 @@
 ## TODO
 [x] - double click/right click empty space to create block
 [x] - drag image onto browser to upload
-[] - handle resizing images / text (wordwrap?)
+[x] - handle resizing images / text (wordwrap?)
   [] - ctrl should snap to original img ratio, not square always
   [] - text should have "flexible" width and height initially (dashed boxes which can be toggled by dbl click?)
 [] - handle clipboard paste (image or text)...
