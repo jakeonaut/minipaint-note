@@ -20,6 +20,7 @@ class DraggableStore {
     this.setX = setX;
     this.setY = setY;
     this.setIsDragging = setIsDragging;
+    this.setIsDragging(true);
   }
 
   handleMouseMove(e) {
