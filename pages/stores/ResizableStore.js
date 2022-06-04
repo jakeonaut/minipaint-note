@@ -13,6 +13,7 @@ class ResizableStore {
   setResizable(e, {
     width, setWidth,
     height, setHeight,
+    ratio,
     setIsResizing,
   }) {
     this.xMouse = e.clientX;
@@ -21,6 +22,7 @@ class ResizableStore {
     this.setWidth = setWidth;
     this.height = height;
     this.setHeight = setHeight;
+    this.ratio = ratio;
     this.setIsResizing = setIsResizing;
     this.setIsResizing(true);
   }
@@ -29,10 +31,11 @@ class ResizableStore {
     let width = this.width + (e.clientX - this.xMouse);
     let height = this.height + (e.clientY - this.yMouse);
     if (e.ctrlKey) {
-      if (width > height) {
-        height = width;
+      const ratio = this.ratio ?? 1;
+      if (width > height / ratio) {
+        height = width / ratio;
       } else {
-        width = height;
+        width = height / ratio;
       }
     }
     this.setWidth?.(width);

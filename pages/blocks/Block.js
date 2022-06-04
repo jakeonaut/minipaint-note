@@ -46,10 +46,13 @@ export default function Block(props) {
     const outlineStyle = isHovered ? "2px dashed lightgray" : "";
 
     function handleResizeMouseDown(e) {
+        const ratio = props.ratio ?? ((width && height) ? (width / height) : undefined);
+        console.log(ratio);
         ResizableStore.setResizable(e,  {
             width, setWidth,
             height, setHeight,
             setIsResizing,
+            ratio,
         });
     }
 
