@@ -1,19 +1,33 @@
 import { useState } from 'react';
+import dynamic from 'next/dynamic';
 import Block from './Block.js'
 
-export default function Text() {
-    const [isEditingText, setIsEditingText] = useState(false);
-    const [text, setText] = useState("hi ! :)")
+const SimpleMDE = dynamic(() => import("react-simplemde-editor"), { ssr: false })
 
-    function handleDoubleClick() {
-        setIsEditingText(!isEditingText);
+export default function Text(props) {
+    const [isEditingText, setIsEditingText] = useState(true);
+    const [value, setValue] = useState("hi ! :)");
+
+    function handleChange(value) {
+        setValue(value);
     }
 
     return (
-        <Block onDoubleClick={handleDoubleClick} x={30} y={30}>
-            <p style={!isEditingText && { userSelect: "none", margin: 0 }}>
-                <>{text}</>
-            </p>
+        <Block
+            onDoubleClick={() => {}}
+            x={props.x ?? 30}
+            y={props.y ?? 30}>
+              <SimpleMDE
+                value={value}
+                options={{
+                    autofocus: true,
+                    unorderedListStyle: '-',
+                    indentWithTabs: false,
+                    minHeight: "0",
+                    status: false,
+                    toolbar: false,
+                }}
+                onChange={handleChange} />
         </Block>
     );
 }
