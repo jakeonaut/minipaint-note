@@ -6,7 +6,7 @@ const SimpleMDE = dynamic(() => import("react-simplemde-editor"), { ssr: false }
 
 export default function Text(props) {
     const [isEditingText, setIsEditingText] = useState(true);
-    const [value, setValue] = useState("hi ! :)");
+    const [value, setValue] = useState(props.value ?? "hi ! :)");
 
     function handleChange(value) {
         setValue(value);
@@ -14,9 +14,10 @@ export default function Text(props) {
 
     return (
         <Block
+            id={props.id}
             onDoubleClick={() => {}}
-            x={props.x ?? 30}
-            y={props.y ?? 30}>
+            x={props.x}
+            y={props.y}>
               <SimpleMDE
                 value={value}
                 options={{

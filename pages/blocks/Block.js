@@ -1,6 +1,8 @@
-import { useState } from 'react';
+import { withRouter } from 'next/router';
+import { useContext, useEffect, useState } from 'react';
 import DraggableStore from '../stores/DraggableStore';
 import ResizableStore from '../stores/ResizableStore';
+import BlockObjContext from '../BlockObjContext';
 
 function ResizePoint(props) {
     return (
@@ -8,6 +10,7 @@ function ResizePoint(props) {
             onMouseDown={props.onMouseDown}
             style={{
                 ...props.style,
+                background: 'white',
                 border: "1px solid black",
                 width: 8,
                 height: 8,
@@ -18,14 +21,21 @@ function ResizePoint(props) {
 }
 
 export default function Block(props) {
-    const [x, setX] = useState(props.x);
-    const [y, setY] = useState(props.y);
+    const [x, setX] = useState(props.x ?? 30);
+    const [y, setY] = useState(props.y ?? 30);
     const [width, setWidth] = useState(props.width ?? 32);
     const [height, setHeight] = useState(props.height ?? 32);
     const [isDragging, setIsDragging] = useState(false);
     const [isDragEnabled, setIsDragEnabled] = useState(props.isDragEnabled ?? true);
     const [isResizing, setIsResizing] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
+    const { addBlockObj, removeBlockObj } = useContext(BlockObjContext);
+
+    // derive updated state from props
+    useEffect(() => {
+        setWidth(props.width);
+        setHeight(props.height);
+    }, [props]);
 
     const resizeOffset = -16;
 
@@ -35,8 +45,7 @@ export default function Block(props) {
                 x, setX,
                 y, setY,
                 setIsDragging,
-                // https://stackoverflow.com/questions/66325017/accessing-the-this-keyword-in-a-react-functional-component
-                this
+                id: props.id, addBlockObj, removeBlockObj,
             });
         }
     }
@@ -49,7 +58,6 @@ export default function Block(props) {
 
     function handleResizeMouseDown(e) {
         const ratio = props.ratio ?? ((width && height) ? (width / height) : undefined);
-        console.log(ratio);
         ResizableStore.setResizable(e,  {
             width, setWidth,
             height, setHeight,

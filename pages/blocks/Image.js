@@ -3,8 +3,8 @@ import Block from './Block.js'
 
 export default function Image(props) {
     const [src, setSrc] = useState(props.src ?? "face-cool.png")
-    const [naturalWidth, setNaturalWidth] = useState(undefined);
-    const [naturalHeight, setNaturalHeight] = useState(undefined);
+    const [naturalWidth, setNaturalWidth] = useState(32);
+    const [naturalHeight, setNaturalHeight] = useState(32);
 
     function handleDoubleClick() {
         console.log("request file")
@@ -22,9 +22,10 @@ export default function Image(props) {
 
     return (
         <Block
+            id={props.id}
           onDoubleClick={handleDoubleClick}
-          x={props.x ?? 60}
-          y={props.y ?? 60}
+          x={props.x}
+          y={props.y}
           width={naturalWidth}
           height={naturalHeight}
           ratio={naturalWidth && naturalHeight ? (naturalWidth/naturalHeight) : undefined}>
