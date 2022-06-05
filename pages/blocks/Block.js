@@ -35,6 +35,8 @@ export default function Block(props) {
                 x, setX,
                 y, setY,
                 setIsDragging,
+                // https://stackoverflow.com/questions/66325017/accessing-the-this-keyword-in-a-react-functional-component
+                this
             });
         }
     }

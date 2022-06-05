@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 
@@ -9,11 +9,18 @@ import Image from './blocks/Image';
 
 export default function Home() {
   const [allBlocks, setAllBlocks] = useState([<Text/>, <Image/>])
+  useEffect(() => {
+    DraggableStore.getSetAllBlocks(allBlocks, setAllBlocks);
+  });
+
   function handleDoubleClick(e) {
     setAllBlocks([
       ...allBlocks,
       <Text x={e.clientX - 16} y={e.clientY - 16} />
     ])
+    // TODO(jaketrower): Oh this seems very bad... 
+    // Is it better to have a separate global allBlocksStore ??? Definitely
+    DraggableStore.getSetAllBlocks(allBlocks, setAllBlocks);
   }
 
   // TODO(jaketrower): Throttle
@@ -74,7 +81,7 @@ export default function Home() {
   return (
     <div>
       <Head>
-        <title>Create Next App</title>
+        <title>COLSOFT</title>
         <link rel="icon" href="/favicon.ico" />
         <link rel="stylesheet" href="/emptymde.min.css" />
         <style>{`
