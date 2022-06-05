@@ -3,6 +3,7 @@ class DraggableStore {
     this.xMouseOffset = 0;
     this.yMouseOffset = 0;
 
+    this.draggableId = undefined
     // TODO(jaketrower): This seems bad
     this.setX = undefined
     this.setY = undefined
@@ -18,22 +19,26 @@ class DraggableStore {
   }) {
     this.xMouseOffset = e.clientX - x
     this.yMouseOffset = e.clientY - y
+
+    this.draggableId = id;
+
     this.setX = setX;
     this.setY = setY;
     this.setIsDragging = setIsDragging;
     this.setIsDragging(true);
-
-    // This is not yet working
-    // Shove block to the top of the stack
-    addBlockObj(removeBlockObj({ id }));
   }
 
   handleMouseMove(e) {
+    if (!this.draggableId) {
+      return;
+    }
+
     this.setX?.(e.clientX - this.xMouseOffset)
     this.setY?.(e.clientY - this.yMouseOffset)
   }
 
   reset() {
+    this.draggableId = undefined;
     this.setIsDragging?.(false);
     
     this.setX = undefined

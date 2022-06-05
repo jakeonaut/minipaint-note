@@ -28,11 +28,15 @@ export default function Block(props) {
     const [isDragging, setIsDragging] = useState(false);
     const [isDragEnabled, setIsDragEnabled] = useState(props.isDragEnabled ?? true);
     const [isResizing, setIsResizing] = useState(false);
+    const [hasResized, setHasResized] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
-    const { addBlockObj, removeBlockObj } = useContext(BlockObjContext);
+    const { popPushBlockObj } = useContext(BlockObjContext);
 
     // derive updated state from props
     useEffect(() => {
+        if (hasResized) {
+            return;
+        }
         setWidth(props.width);
         setHeight(props.height);
     }, [props]);
@@ -41,11 +45,12 @@ export default function Block(props) {
 
     function handleMouseDown(e) {
         if (isDragEnabled) {
+            popPushBlockObj(props.id);
             DraggableStore.setDraggable(e, {
                 x, setX,
                 y, setY,
                 setIsDragging,
-                id: props.id, addBlockObj, removeBlockObj,
+                id: props.id,
             });
         }
     }
@@ -57,12 +62,15 @@ export default function Block(props) {
     const outlineStyle = isHovered ? "2px dashed lightgray" : "";
 
     function handleResizeMouseDown(e) {
+        setHasResized(true);
+        popPushBlockObj(props.id);
         const ratio = props.ratio ?? ((width && height) ? (width / height) : undefined);
         ResizableStore.setResizable(e,  {
             width, setWidth,
             height, setHeight,
             setIsResizing,
             ratio,
+            id: props.id,
         });
     }
 

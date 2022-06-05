@@ -1,4 +1,5 @@
-import { useContext, useEffect, useReducer, useState } from 'react';
+import { useContext, useEffect, useReducer, useState, useMemo } from 'react';
+import debounce from 'lodash.debounce';
 import { v4 as uuidV4 } from 'uuid';
 import Head from 'next/head';
 import Link from 'next/link';
@@ -62,10 +63,14 @@ export default function Home() {
       blockObj,
     ])
   }
-  function removeBlockObj(fakeObj) {
-    const removedBlockObj = blockObjects.find((o) => o.id === fakeObj.id);
-    setBlockObjects(blockObjects.filter((o) => o.id !== fakeObj.id))
+  function removeBlockObj(id) {
+    const removedBlockObj = blockObjects.find((o) => o.id === id);
+    setBlockObjects([...blockObjects.filter((o) => o.id !== id)]);
     return removedBlockObj;
+  }
+  function popPushBlockObj(id) {
+    const poppedBlockObj = blockObjects.find((o) => o.id === id);
+    setBlockObjects([...blockObjects.filter((o) => o.id !== id), poppedBlockObj]);
   }
 
   function handleDoubleClick(e) {
@@ -101,7 +106,7 @@ export default function Home() {
       if (file.type.match(/image.*/)) {
         const reader = new FileReader();
         reader.onload = (e2) => {
-          removeBlockObj(blockObj);
+          removeBlockObj(blockObj.id);
           blockObj.src = e2.target.result;
           addBlockObj(blockObj);
         }
@@ -113,11 +118,13 @@ export default function Home() {
     addBlockObj(blockObj);
   }
 
-  // TODO(jaketrower): Throttle
   function handleMouseMove(e) { 
-    DraggableStore.handleMouseMove(e, addBlockObj, removeBlockObj);
+    DraggableStore.handleMouseMove(e);
     ResizableStore.handleMouseMove(e);
   }
+  const debouncedMouseMoveHandler = useMemo(
+    () => debounce(handleMouseMove, 1)
+  , []);
   function handleMouseUp(e) {
     DraggableStore.reset();
     ResizableStore.reset();
@@ -142,6 +149,7 @@ export default function Home() {
             blockObjects,
             addBlockObj,
             removeBlockObj,
+            popPushBlockObj,
           }}
         >
           <div style={{
@@ -149,7 +157,7 @@ export default function Home() {
               height: "100vh",
             }}
             onDoubleClick={handleDoubleClick}
-            onMouseMove={handleMouseMove}
+            onMouseMove={debouncedMouseMoveHandler}
             onMouseUp={handleMouseUp}
             onDragEnter={onDragEnter}
             onDragOver={onDragOver}

@@ -12,7 +12,8 @@
 [] - shift drag to duplicate blocks ?
 [] - handle deleting blocks ()
 [] - hovering is annoying with block precedence
-  [] - ideally whichever block was last hovered/dragged will have "precedence" (repositioned last in allBlocks? z-index?)
+  [] - should resize frames have their own z-index precedence that overrides blocks when hovering ?
+  [x] - ideally whichever block was last dragged will have "precedence" (repositioned last in allBlocks? z-index?)
   [] - large textblocks/images that are partially covering blocks below (but that you can see below?) make the underlying inaccessible
 
 

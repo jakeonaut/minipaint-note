@@ -3,6 +3,8 @@ class ResizableStore {
     this.xMouse = 0;
     this.yMouse = 0;
 
+    this.resizableId = undefined;
+
     // TODO(jaketrower): This seems bad
     this.setWidth = undefined
     this.setHeight = undefined
@@ -15,9 +17,11 @@ class ResizableStore {
     height, setHeight,
     ratio,
     setIsResizing,
+    id,
   }) {
     this.xMouse = e.clientX;
     this.yMouse = e.clientY;
+    this.resizableId = id;
     this.width = width;
     this.setWidth = setWidth;
     this.height = height;
@@ -28,6 +32,10 @@ class ResizableStore {
   }
 
   handleMouseMove(e) {
+    if (!this.resizableId) {
+      return;
+    }
+
     let width = this.width + (e.clientX - this.xMouse);
     let height = this.height + (e.clientY - this.yMouse);
     if (e.ctrlKey) {
@@ -43,6 +51,7 @@ class ResizableStore {
   }
 
   reset() {
+    this.resizableId = undefined;
     this.setIsResizing?.(false);
     
     this.setWidth = undefined
