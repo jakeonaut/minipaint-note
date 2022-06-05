@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+  import { useEffect, useState } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 
@@ -7,8 +7,15 @@ import ResizableStore from './stores/ResizableStore';
 import Text from './blocks/Text';
 import Image from './blocks/Image';
 
+let keyCounter = 0;
+function generateKey() {
+  const key = keyCounter;
+  keyCounter++;
+  return key;
+}
+
 export default function Home() {
-  const [allBlocks, setAllBlocks] = useState([<Text/>, <Image/>])
+  const [allBlocks, setAllBlocks] = useState([<Text key={generateKey()} />, <Image key={generateKey()}/>])
   useEffect(() => {
     DraggableStore.getSetAllBlocks(allBlocks, setAllBlocks);
   });
@@ -16,7 +23,7 @@ export default function Home() {
   function handleDoubleClick(e) {
     setAllBlocks([
       ...allBlocks,
-      <Text x={e.clientX - 16} y={e.clientY - 16} />
+      <Text x={e.clientX - 16} y={e.clientY - 16}  key={generateKey()} />
     ])
     // TODO(jaketrower): Oh this seems very bad... 
     // Is it better to have a separate global allBlocksStore ??? Definitely
@@ -52,7 +59,7 @@ export default function Home() {
     console.log("onFileDrop");
 
     const allBlocksBefore = allBlocks;
-    const image = <Image x={e.clientX - 48} y={e.clientY - 48} />
+    const image = <Image x={e.clientX - 48} y={e.clientY - 48}  key={generateKey()} />
 
     const files = e.dataTransfer.files;
     for (let i = 0, file; file=files[i]; i++) {
